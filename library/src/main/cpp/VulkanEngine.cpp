@@ -295,34 +295,6 @@ void VulkanEngine::updateVideoTexture(const std::string &id, AHardwareBuffer *ah
     vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
 }
 
-void VulkanEngine::setOrientation(int degrees) {
-    float radians = degrees * (M_PI / 180.0f);
-    float c = std::cos(radians);
-    float s = std::sin(radians);
-    for (auto &pair: windows) {
-        PushConstantData &pc = pair.second.pushConstantData;
-        pc.transform[0] = c;
-        pc.transform[4] = -s;
-        pc.transform[8] = 0.0f;
-        pc.transform[12] = 0.0f;
-
-        pc.transform[1] = s;
-        pc.transform[5] = c;
-        pc.transform[9] = 0.0f;
-        pc.transform[13] = 0.0f;
-
-        pc.transform[2] = 0.0f;
-        pc.transform[6] = 0.0f;
-        pc.transform[10] = 1.0f;
-        pc.transform[14] = 0.0f;
-
-        pc.transform[3] = 0.0f;
-        pc.transform[7] = 0.0f;
-        pc.transform[11] = 0.0f;
-        pc.transform[15] = 1.0f;
-    }
-}
-
 void VulkanEngine::recordCommandBuffer(WindowContext &ctx, uint32_t imageIndex) {
     VkCommandBufferBeginInfo beginInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
     vkBeginCommandBuffer(ctx.commandBuffers[imageIndex], &beginInfo);

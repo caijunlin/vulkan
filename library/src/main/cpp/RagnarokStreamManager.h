@@ -40,8 +40,6 @@ public:
     // 清理一切
     void releaseAll();
 
-    static void setOrientation(int degrees);
-
     // 供底层的 ImageAvailable 回调使用的分发接口
     void pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb, AImage *new_image);
 

@@ -128,7 +128,3 @@ void RagnarokStreamManager::releaseAll() {
     surface_to_url.clear();
     VulkanEngine::getInstance().cleanup();
 }
-
-void RagnarokStreamManager::setOrientation(int degrees) {
-    VulkanEngine::getInstance().setOrientation(degrees);
-}

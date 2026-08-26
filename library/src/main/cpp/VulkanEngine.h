@@ -74,8 +74,6 @@ public:
 
     void updateVideoTexture(const std::string &id, AHardwareBuffer *ahb);
 
-    void setOrientation(int degrees);
-
     VkShaderModule createShaderModule(const std::vector<char> &code);
 
 private:

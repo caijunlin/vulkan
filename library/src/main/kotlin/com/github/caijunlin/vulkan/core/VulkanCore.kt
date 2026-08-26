@@ -75,6 +75,4 @@ object VulkanCore {
      */
     external fun destroyHeadlessSurface(url: String)
 
-    external fun setOrientation(angle: Int)
-
 }

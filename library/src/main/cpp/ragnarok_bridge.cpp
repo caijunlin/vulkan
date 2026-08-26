@@ -64,9 +64,3 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_github_caijunlin_vulkan_core_VulkanCore_releaseAll(JNIEnv* env, jclass clazz /* this */) {
     RagnarokStreamManager::getInstance().releaseAll();
 }
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_github_caijunlin_vulkan_core_VulkanCore_setOrientation(JNIEnv *env, jobject clazz, jint angle) {
-    // 调用 RagnarokStreamManager 而不是 VulkanEngine，且不再需要 windowId
-    RagnarokStreamManager::setOrientation(angle);
-}
