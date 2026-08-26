@@ -110,8 +110,8 @@ object VLCRenderPool {
                 media.parse(IMedia.Parse.FetchNetwork)
             }
 
-            val videoWidth = 640
-            val videoHeight = 360
+            val videoWidth = 720
+            val videoHeight = 480
             val headlessSurface = VulkanCore.createHeadlessSurface(url, videoWidth, videoHeight)
             val mediaPlayer = MediaPlayer(libVlc)
             mediaPlayer.media = media

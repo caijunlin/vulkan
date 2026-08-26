@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -54,8 +55,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -141,8 +144,7 @@ class MainActivity : ComponentActivity() {
                         onClick = {
                             selectedIds.clear()
                             selectionMode = false
-                        },
-                        modifier = Modifier.size(28.dp)
+                        }, modifier = Modifier.size(28.dp)
                     ) {
                         Icon(
                             Icons.Default.Close,
@@ -152,13 +154,11 @@ class MainActivity : ComponentActivity() {
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "已选中 ${selectedIds.size} 项",
-                        fontSize = 12.sp
+                        text = "已选中 ${selectedIds.size} 项", fontSize = 12.sp
                     )
                 }
                 IconButton(
-                    onClick = { deleteSelected() },
-                    modifier = Modifier.size(28.dp)
+                    onClick = { deleteSelected() }, modifier = Modifier.size(28.dp)
                 ) {
                     Icon(
                         Icons.Default.Delete,
@@ -193,8 +193,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .height(36.dp),
                     textStyle = TextStyle(
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface
                     ),
                     singleLine = true,
                     interactionSource = interactionSourceUrl
@@ -221,8 +220,7 @@ class MainActivity : ComponentActivity() {
                                 interactionSource = interactionSourceUrl,
                                 colors = OutlinedTextFieldDefaults.colors()
                             )
-                        }
-                    )
+                        })
                 }
 
                 // 右侧下拉按钮
@@ -238,24 +236,19 @@ class MainActivity : ComponentActivity() {
                 }
 
                 DropdownMenu(
-                    expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false }
-                ) {
+                    expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
                     presetUrls.forEach { url ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    url,
-                                    fontSize = 12.sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            },
-                            onClick = {
-                                urlText = url
-                                menuExpanded = false
-                            }
-                        )
+                        DropdownMenuItem(text = {
+                            Text(
+                                url,
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }, onClick = {
+                            urlText = url
+                            menuExpanded = false
+                        })
                     }
                 }
             }
@@ -269,8 +262,7 @@ class MainActivity : ComponentActivity() {
                     .width(52.dp)
                     .height(36.dp),
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true,
                 interactionSource = interactionSourceCount
@@ -290,8 +282,7 @@ class MainActivity : ComponentActivity() {
                             interactionSource = interactionSourceCount,
                             colors = OutlinedTextFieldDefaults.colors()
                         )
-                    }
-                )
+                    })
             }
 
             Spacer(modifier = Modifier.width(6.dp))
@@ -301,7 +292,7 @@ class MainActivity : ComponentActivity() {
                 onClick = {
                     val url = urlText.trim()
                     if (url.isNotEmpty()) {
-                        val count = countText.toIntOrNull()?.coerceIn(1, 20) ?: 1
+                        val count = countText.toIntOrNull()?.coerceIn(1, 50) ?: 1
                         repeat(count) {
                             items.add(StreamItem(nextId++, url))
                             VLCRenderPool.startDecodeTask(url)
@@ -316,11 +307,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** 紧凑型网格列表 */
     @Composable
     private fun SurfaceList() {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 90.dp),
+            columns = GridCells.Adaptive(minSize = 150.dp),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(6.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -347,9 +337,9 @@ class MainActivity : ComponentActivity() {
 
         Card(
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp),
             border = if (isSelected) BorderStroke(
-                2.dp,
-                MaterialTheme.colorScheme.primary
+                2.dp, MaterialTheme.colorScheme.primary
             ) else null,
             colors = CardDefaults.cardColors(
                 containerColor = if (isSelected) {
@@ -393,22 +383,29 @@ class MainActivity : ComponentActivity() {
                                         }
                                     })
                                 }
-                            },
-                            modifier = Modifier.fillMaxSize()
+                            }, modifier = Modifier.fillMaxSize()
+                        )
+
+                        Text(
+                            text = item.url,
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .fillMaxWidth()
+                                .background(Color.Black.copy(alpha = 0.5f))
+                                .padding(horizontal = 4.dp, vertical = 0.dp),
+                            color = Color.White,
+                            fontSize = 9.sp,
+                            maxLines = 1,
+                            style = TextStyle(
+                                fontSize = 9.sp, platformStyle = PlatformTextStyle(
+                                    includeFontPadding = false
+                                ), lineHeightStyle = LineHeightStyle(
+                                    alignment = LineHeightStyle.Alignment.Center,
+                                    trim = LineHeightStyle.Trim.Both
+                                )
+                            )
                         )
                     }
-
-                    Text(
-                        text = item.url,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.DarkGray)
-                            .padding(4.dp),
-                        color = Color.White,
-                        fontSize = 9.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
                 }
 
                 // 透明覆盖层控制选择逻辑
@@ -416,30 +413,26 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .matchParentSize()
                         .pointerInput(item.id) {
-                            detectTapGestures(
-                                onTap = {
-                                    if (selectionMode) {
-                                        if (isSelected) {
-                                            selectedIds.remove(item.id)
-                                            if (selectedIds.isEmpty()) {
-                                                selectionMode = false
-                                            }
-                                        } else {
-                                            selectedIds.add(item.id)
+                            detectTapGestures(onTap = {
+                                if (selectionMode) {
+                                    if (isSelected) {
+                                        selectedIds.remove(item.id)
+                                        if (selectedIds.isEmpty()) {
+                                            selectionMode = false
                                         }
-                                    }
-                                },
-                                onLongPress = {
-                                    if (!selectionMode) {
-                                        selectionMode = true
-                                    }
-                                    if (!isSelected) {
+                                    } else {
                                         selectedIds.add(item.id)
                                     }
                                 }
-                            )
-                        }
-                )
+                            }, onLongPress = {
+                                if (!selectionMode) {
+                                    selectionMode = true
+                                }
+                                if (!isSelected) {
+                                    selectedIds.add(item.id)
+                                }
+                            })
+                        })
             }
         }
     }
