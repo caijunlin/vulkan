@@ -1,1 +1,0 @@
-D:\Android\Projects\VLCVulkan\vulkan\src\main\cpp\CMakeLists.txt

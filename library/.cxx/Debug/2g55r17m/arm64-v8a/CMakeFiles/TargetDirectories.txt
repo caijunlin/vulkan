@@ -1,4 +1,0 @@
-D:/Android/Projects/vulkan/library/.cxx/Debug/2g55r17m/arm64-v8a/CMakeFiles/CompileShaders.dir
-D:/Android/Projects/vulkan/library/.cxx/Debug/2g55r17m/arm64-v8a/CMakeFiles/ragnarok.dir
-D:/Android/Projects/vulkan/library/.cxx/Debug/2g55r17m/arm64-v8a/CMakeFiles/edit_cache.dir
-D:/Android/Projects/vulkan/library/.cxx/Debug/2g55r17m/arm64-v8a/CMakeFiles/rebuild_cache.dir
