@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-RelWithDebInfo-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "RelWithDebInfo",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ragnarok_engine",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CompileShaders::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CompileShaders-RelWithDebInfo-5502efc461c350e8bbf4.json",
+					"name" : "CompileShaders",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ragnarok::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ragnarok-RelWithDebInfo-9b657b0af03b63204496.json",
+					"name" : "ragnarok",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/Android/Projects/vulkan/library/.cxx/RelWithDebInfo/5g603m28/arm64-v8a",
+		"source" : "D:/Android/Projects/vulkan/library/src/main/cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

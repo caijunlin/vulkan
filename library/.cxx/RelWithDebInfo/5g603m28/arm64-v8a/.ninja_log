@@ -1,0 +1,19 @@
+# ninja log v5
+246	11645	8093463858726882	CMakeFiles/ragnarok.dir/ragnarok_bridge.cpp.o	7144c19b0aaa8ba7
+231	12116	8093463866172810	CMakeFiles/ragnarok.dir/RagnarokStreamManager.cpp.o	6783a5756217b5e4
+17	227	8093463750303981	D:/Android/Projects/vulkan/library/src/main/assets/shaders/triangle_frag.spv	241976c8a3429b74
+238	14124	8093463882277972	CMakeFiles/ragnarok.dir/VulkanEngine.cpp.o	f82782f6bde32665
+0	88	8094151175204828	build.ninja	f66e8945d7dd251a
+14142	16336	8093463909728551	D:/Android/Projects/vulkan/library/build/intermediates/cxx/RelWithDebInfo/5g603m28/obj/arm64-v8a/libragnarok.so	c6e573cdb0b461f3
+0	11	0	clean	8b6eb38772ef9922
+30	231	8093463750348987	D:/Android/Projects/vulkan/library/src/main/assets/shaders/triangle_vert.spv	77512508c0373565
+11	539	8094151179769635	D:/Android/Projects/vulkan/library/src/main/assets/shaders/triangle_vert.spv	b09d49894e8295ab
+26	625	8094151182248504	D:/Android/Projects/vulkan/library/src/main/assets/shaders/triangle_frag.spv	c65a9bd6d0bc499d
+625	2387	8094151200346914	CMakeFiles/ragnarok.dir/ragnarok_bridge.cpp.o	7144c19b0aaa8ba7
+635	2631	8094151202767529	CMakeFiles/ragnarok.dir/RagnarokStreamManager.cpp.o	6783a5756217b5e4
+654	2943	8094151205833887	CMakeFiles/ragnarok.dir/VulkanEngine.cpp.o	f82782f6bde32665
+2944	3077	8094151207197641	D:/Android/Projects/vulkan/library/build/intermediates/cxx/RelWithDebInfo/5g603m28/obj/arm64-v8a/libragnarok.so	c6e573cdb0b461f3
+0	13	0	clean	8b6eb38772ef9922
+0	9	0	clean	8b6eb38772ef9922
+0	10	0	clean	8b6eb38772ef9922
+1	13	0	clean	8b6eb38772ef9922

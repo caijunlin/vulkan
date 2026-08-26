@@ -1,0 +1,17 @@
+[
+{
+  "directory": "D:/Android/Projects/vulkan/vulkan/.cxx/Debug/6m2w3i51/arm64-v8a",
+  "command": "D:\\Android\\Sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=aarch64-none-linux-android29 --sysroot=D:/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dragnarok_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++17 -fno-limit-debug-info  -fPIC -o CMakeFiles\\ragnarok.dir\\ragnarok_bridge.cpp.o -c D:\\Android\\Projects\\vulkan\\vulkan\\src\\main\\cpp\\ragnarok_bridge.cpp",
+  "file": "D:\\Android\\Projects\\vulkan\\vulkan\\src\\main\\cpp\\ragnarok_bridge.cpp"
+},
+{
+  "directory": "D:/Android/Projects/vulkan/vulkan/.cxx/Debug/6m2w3i51/arm64-v8a",
+  "command": "D:\\Android\\Sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=aarch64-none-linux-android29 --sysroot=D:/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dragnarok_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++17 -fno-limit-debug-info  -fPIC -o CMakeFiles\\ragnarok.dir\\VulkanEngine.cpp.o -c D:\\Android\\Projects\\vulkan\\vulkan\\src\\main\\cpp\\VulkanEngine.cpp",
+  "file": "D:\\Android\\Projects\\vulkan\\vulkan\\src\\main\\cpp\\VulkanEngine.cpp"
+},
+{
+  "directory": "D:/Android/Projects/vulkan/vulkan/.cxx/Debug/6m2w3i51/arm64-v8a",
+  "command": "D:\\Android\\Sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=aarch64-none-linux-android29 --sysroot=D:/Android/Sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dragnarok_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -std=c++17 -fno-limit-debug-info  -fPIC -o CMakeFiles\\ragnarok.dir\\RagnarokStreamManager.cpp.o -c D:\\Android\\Projects\\vulkan\\vulkan\\src\\main\\cpp\\RagnarokStreamManager.cpp",
+  "file": "D:\\Android\\Projects\\vulkan\\vulkan\\src\\main\\cpp\\RagnarokStreamManager.cpp"
+}
+]

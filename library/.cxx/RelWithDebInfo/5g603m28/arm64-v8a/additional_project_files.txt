@@ -1,0 +1,4 @@
+D:\Android\Projects\vulkan\library\.cxx\RelWithDebInfo\5g603m28\arm64-v8a\CMakeFiles\CompileShaders
+D:\Android\Projects\vulkan\library\.cxx\RelWithDebInfo\5g603m28\arm64-v8a\CMakeFiles\CompileShaders.rule
+D:\Android\Projects\vulkan\library\src\main\assets\shaders\triangle_frag.spv.rule
+D:\Android\Projects\vulkan\library\src\main\assets\shaders\triangle_vert.spv.rule
