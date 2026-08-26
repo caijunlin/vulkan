@@ -9,10 +9,6 @@
 #include <string>
 #include <android/native_window.h>
 
-struct PushConstantData {
-    float transform[16]; // 4x4 变换矩阵
-};
-
 struct VulkanTexture {
     VkImage image{VK_NULL_HANDLE};
     VkDeviceMemory memory{VK_NULL_HANDLE};
@@ -45,14 +41,6 @@ struct WindowContext {
 
     VulkanTexture currentVideoTexture{};
 
-    PushConstantData pushConstantData = {
-            {
-                    1.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 1.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 1.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f
-            }
-    };
 };
 
 class VulkanEngine {

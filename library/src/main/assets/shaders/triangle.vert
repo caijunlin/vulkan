@@ -10,13 +10,9 @@ vec2(0.0, 0.0), vec2(1.0, 0.0), vec2(0.0, 1.0),
 vec2(0.0, 1.0), vec2(1.0, 0.0), vec2(1.0, 1.0)
 );
 
-layout(push_constant) uniform PushConstants {
-    mat4 transformMatrix;
-} push;
-
 layout(location = 0) out vec2 fragTexCoord;
 
 void main() {
-    gl_Position = push.transformMatrix * vec4(positions[gl_VertexIndex], 0.0, 1.0);
+    gl_Position = vec4(positions[gl_VertexIndex], 0.0, 1.0);
     fragTexCoord = texCoords[gl_VertexIndex];
 }

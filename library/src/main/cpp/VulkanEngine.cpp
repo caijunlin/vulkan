@@ -109,19 +109,11 @@ bool VulkanEngine::buildPipelineForWindow(const std::string &id, WindowContext &
     allocSetInfo.pSetLayouts = &ctx.descriptorSetLayout;
     vkAllocateDescriptorSets(device, &allocSetInfo, &ctx.descriptorSet);
 
-    // =========================================================================
-    // === 新增：定义并配置 Push Constant 给 Pipeline Layout (用于传递旋转矩阵) ===
-    // =========================================================================
-    VkPushConstantRange pushConstantRange{};
-    pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-    pushConstantRange.offset = 0;
-    pushConstantRange.size = sizeof(PushConstantData);
-
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = &ctx.descriptorSetLayout;
-    pipelineLayoutInfo.pushConstantRangeCount = 1;                    // === 新增 ===
-    pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;      // === 新增 ===
+    pipelineLayoutInfo.pushConstantRangeCount = 0;
+    pipelineLayoutInfo.pPushConstantRanges = nullptr;
     vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &ctx.pipelineLayout);
 
     auto vertSpv = readShaderAsset("shaders/triangle_vert.spv");
@@ -341,15 +333,6 @@ void VulkanEngine::recordCommandBuffer(WindowContext &ctx, uint32_t imageIndex) 
                                 ctx.pipelineLayout, 0, 1, &ctx.descriptorSet, 0, nullptr);
     }
 
-    vkCmdPushConstants(
-            ctx.commandBuffers[imageIndex],
-            ctx.pipelineLayout,
-            VK_SHADER_STAGE_VERTEX_BIT,
-            0,
-            sizeof(PushConstantData),
-            &ctx.pushConstantData
-    );
-
     vkCmdDraw(ctx.commandBuffers[imageIndex], 6, 1, 0, 0);
     vkCmdEndRenderPass(ctx.commandBuffers[imageIndex]);
     vkEndCommandBuffer(ctx.commandBuffers[imageIndex]);
@@ -495,7 +478,7 @@ bool VulkanEngine::addWindow(const std::string &id, ANativeWindow *window) {
     swapchainInfo.imageArrayLayers = 1;
     swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    swapchainInfo.preTransform = capabilities.currentTransform;
+    swapchainInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
     swapchainInfo.compositeAlpha = (capabilities.supportedCompositeAlpha &
                                     VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR)
                                    ? VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR
