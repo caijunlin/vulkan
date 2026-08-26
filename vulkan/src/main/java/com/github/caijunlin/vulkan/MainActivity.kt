@@ -1,10 +1,14 @@
 package com.github.caijunlin.vulkan
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.Gravity
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -59,6 +63,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -386,24 +391,32 @@ class MainActivity : ComponentActivity() {
                             }, modifier = Modifier.fillMaxSize()
                         )
 
-                        Text(
-                            text = item.url,
+                        AndroidView(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth()
-                                .background(Color.Black.copy(alpha = 0.5f))
-                                .padding(horizontal = 4.dp, vertical = 0.dp),
-                            color = Color.White,
-                            fontSize = 9.sp,
-                            maxLines = 1,
-                            style = TextStyle(
-                                fontSize = 9.sp, platformStyle = PlatformTextStyle(
-                                    includeFontPadding = false
-                                ), lineHeightStyle = LineHeightStyle(
-                                    alignment = LineHeightStyle.Alignment.Center,
-                                    trim = LineHeightStyle.Trim.Both
-                                )
-                            )
+                                .background(Color.Black.copy(alpha = 0.5f)),
+                            factory = { context ->
+                                TextView(context).apply {
+                                    typeface = Typeface.SANS_SERIF
+                                    // 居中且靠上对齐
+                                    gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                                    isSingleLine = true
+                                    // 中间省略
+                                    ellipsize = TextUtils.TruncateAt.MIDDLE
+                                    isClickable = false
+                                    setTextColor(android.graphics.Color.WHITE) // 白色字体
+                                    textSize = 9f // 9sp
+                                    includeFontPadding = false // 去除默认的上下留白
+                                    // 左右 4dp 的 padding，上下 0dp
+                                    val paddingPx =
+                                        (4 * context.resources.displayMetrics.density).toInt()
+                                    setPadding(paddingPx, 0, paddingPx, 0)
+                                }
+                            },
+                            update = { textView ->
+                                textView.text = item.url
+                            }
                         )
                     }
                 }
