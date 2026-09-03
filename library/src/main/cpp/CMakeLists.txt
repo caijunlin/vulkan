@@ -78,9 +78,9 @@ set_target_properties(swresample PROPERTIES
 add_library(
         fork
         SHARED
-        ragnarok_bridge.cpp
+        fork_jni.cpp
         VulkanEngine.cpp
-        RagnarokStreamManager.cpp)
+        ForkStreamManager.cpp)
 
 add_dependencies(fork CompileShaders)
 

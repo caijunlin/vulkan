@@ -6,17 +6,11 @@ import androidx.annotation.Keep
 
 /**
  * Vulkan 渲染引擎的 JNI 桥接入口。
- *
- * 该单例对象封装了 Kotlin/Java 层与底层 C++（`libfork.so`）之间的
- * 原生方法调用，是上层业务（例如 X5WebView）使用 Vulkan 渲染能力的唯一入口。
  */
 object VulkanCore {
 
     /**
      * 在对象初始化时加载本地库 `fork`。
-     *
-     * 所有 `external` 方法都由该库中的 C++ 实现提供，
-     * 因此必须确保在首次调用任何外部方法之前完成库加载。
      */
     init {
         System.loadLibrary("fork")
@@ -25,8 +19,7 @@ object VulkanCore {
     /**
      * 初始化 Vulkan 渲染环境。
      *
-     * @param assetManager 应用的 AssetManager，用于让本地层读取
-     *         assets 目录下的着色器（shaders）及其它资源文件。
+     * @param assetManager 应用的 AssetManager
      */
     @Keep
     @JvmStatic

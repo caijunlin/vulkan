@@ -8,7 +8,6 @@
 #include <android/native_window.h>
 #include <android/asset_manager.h>
 
-// 视频流上下文：一个 URL 对应一个幽灵画布和一堆绑定的物理屏幕
 struct StreamContext {
     std::string url;
     AImageReader *image_reader = nullptr;
@@ -17,36 +16,32 @@ struct StreamContext {
     AImage *current_image = nullptr;
 };
 
-class RagnarokStreamManager {
+class ForkStreamManager {
 public:
-    static RagnarokStreamManager &getInstance() {
-        static RagnarokStreamManager instance;
+    static ForkStreamManager &getInstance() {
+        static ForkStreamManager instance;
         return instance;
     }
 
     void init(AAssetManager *assetManager);
 
-    // 原生幽灵画布生命周期
     ANativeWindow *createHeadlessReader(const std::string &url, int width, int height);
 
     void destroyHeadlessReader(const std::string &url);
 
-    // 物理画布 (Surface) 挂载与卸载
     void
     attachSurface(const std::string &url, const std::string &surface_id, ANativeWindow *window);
 
     void detachSurface(const std::string &surface_id);
 
-    // 清理一切
     void releaseAll();
 
-    // 供底层的 ImageAvailable 回调使用的分发接口
     void pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb, AImage *new_image);
 
 private:
-    RagnarokStreamManager() = default;
+    ForkStreamManager() = default;
 
-    ~RagnarokStreamManager() = default;
+    ~ForkStreamManager() = default;
 
     std::unordered_map<std::string, StreamContext> streams;
     std::unordered_map<std::string, std::string> surface_to_url;
