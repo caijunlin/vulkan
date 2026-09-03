@@ -15,7 +15,7 @@ object VulkanCore {
      * 在对象初始化时加载本地库
      */
     init {
-        System.loadLibrary("cvulkan")
+        System.loadLibrary("vk")
     }
 
     /**

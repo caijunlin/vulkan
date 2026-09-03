@@ -1,4 +1,4 @@
-#include "CVulkanEngine.h"
+#include "VulkanEngine.h"
 #include <android/log.h>
 #include <stdexcept>
 #include <cmath>
@@ -13,7 +13,7 @@ const std::vector<const char *> deviceExtensions = {
         "VK_KHR_get_memory_requirements2"
 };
 
-bool CVulkanEngine::init(AAssetManager *mgr) {
+bool VulkanEngine::init(AAssetManager *mgr) {
     this->assetManager = mgr;
     if (vkInstance != VK_NULL_HANDLE) return true;
     if (!createInstance()) return false;
@@ -30,7 +30,7 @@ bool CVulkanEngine::init(AAssetManager *mgr) {
     return true;
 }
 
-std::vector<char> CVulkanEngine::readShaderAsset(const char *filename) {
+std::vector<char> VulkanEngine::readShaderAsset(const char *filename) {
     if (!assetManager) {
         return {};
     }
@@ -48,8 +48,8 @@ std::vector<char> CVulkanEngine::readShaderAsset(const char *filename) {
     return buffer;
 }
 
-bool CVulkanEngine::buildPipelineForWindow(const std::string &id, WindowContext &ctx,
-                                           AHardwareBuffer *firstAhb) {
+bool VulkanEngine::buildPipelineForWindow(const std::string &id, WindowContext &ctx,
+                                          AHardwareBuffer *firstAhb) {
     VkAndroidHardwareBufferFormatPropertiesANDROID formatProps{
             VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID};
     VkAndroidHardwareBufferPropertiesANDROID ahbProps{
@@ -190,7 +190,7 @@ bool CVulkanEngine::buildPipelineForWindow(const std::string &id, WindowContext 
     return true;
 }
 
-void CVulkanEngine::updateVideoTexture(const std::string &id, AHardwareBuffer *ahb) {
+void VulkanEngine::updateVideoTexture(const std::string &id, AHardwareBuffer *ahb) {
     auto it = windows.find(id);
     if (it == windows.end() || !ahb) return;
     auto &ctx = it->second;
@@ -287,7 +287,7 @@ void CVulkanEngine::updateVideoTexture(const std::string &id, AHardwareBuffer *a
     vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
 }
 
-void CVulkanEngine::recordCommandBuffer(WindowContext &ctx, uint32_t imageIndex) {
+void VulkanEngine::recordCommandBuffer(WindowContext &ctx, uint32_t imageIndex) {
     VkCommandBufferBeginInfo beginInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
     vkBeginCommandBuffer(ctx.commandBuffers[imageIndex], &beginInfo);
 
@@ -338,7 +338,7 @@ void CVulkanEngine::recordCommandBuffer(WindowContext &ctx, uint32_t imageIndex)
     vkEndCommandBuffer(ctx.commandBuffers[imageIndex]);
 }
 
-void CVulkanEngine::drawFrame(const std::string &id) {
+void VulkanEngine::drawFrame(const std::string &id) {
     auto it = windows.find(id);
     if (it == windows.end()) return;
     auto &ctx = it->second;
@@ -389,7 +389,7 @@ void CVulkanEngine::drawFrame(const std::string &id) {
     ctx.currentFrame = (ctx.currentFrame + 1) % ctx.framebuffers.size();
 }
 
-void CVulkanEngine::removeWindow(const std::string &id) {
+void VulkanEngine::removeWindow(const std::string &id) {
     auto it = windows.find(id);
     if (it != windows.end()) {
         vkDeviceWaitIdle(device);
@@ -433,7 +433,7 @@ void CVulkanEngine::removeWindow(const std::string &id) {
     }
 }
 
-void CVulkanEngine::cleanup() {
+void VulkanEngine::cleanup() {
     if (device == VK_NULL_HANDLE) return;
     vkDeviceWaitIdle(device);
     for (auto &pair: windows) removeWindow(pair.first);
@@ -443,7 +443,7 @@ void CVulkanEngine::cleanup() {
     if (vkInstance != VK_NULL_HANDLE) vkDestroyInstance(vkInstance, nullptr);
 }
 
-bool CVulkanEngine::addWindow(const std::string &id, ANativeWindow *window) {
+bool VulkanEngine::addWindow(const std::string &id, ANativeWindow *window) {
     if (!window) return false;
     if (device != VK_NULL_HANDLE) vkDeviceWaitIdle(device);
     if (windows.find(id) != windows.end()) removeWindow(id);
@@ -564,7 +564,7 @@ bool CVulkanEngine::addWindow(const std::string &id, ANativeWindow *window) {
     return true;
 }
 
-uint32_t CVulkanEngine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+uint32_t VulkanEngine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memProperties;
     vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
     for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
@@ -576,7 +576,7 @@ uint32_t CVulkanEngine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlag
     throw std::runtime_error("Failed to find memory type");
 }
 
-VkShaderModule CVulkanEngine::createShaderModule(const std::vector<char> &code) {
+VkShaderModule VulkanEngine::createShaderModule(const std::vector<char> &code) {
     VkShaderModuleCreateInfo createInfo{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
     createInfo.codeSize = code.size();
     createInfo.pCode = reinterpret_cast<const uint32_t *>(code.data());
@@ -585,7 +585,7 @@ VkShaderModule CVulkanEngine::createShaderModule(const std::vector<char> &code) 
     return shaderModule;
 }
 
-bool CVulkanEngine::createInstance() {
+bool VulkanEngine::createInstance() {
     VkApplicationInfo appInfo{VK_STRUCTURE_TYPE_APPLICATION_INFO};
     appInfo.apiVersion = VK_API_VERSION_1_1;
     std::vector<const char *> extensions = {"VK_KHR_surface", "VK_KHR_android_surface"};
@@ -596,7 +596,7 @@ bool CVulkanEngine::createInstance() {
     return vkCreateInstance(&createInfo, nullptr, &vkInstance) == VK_SUCCESS;
 }
 
-bool CVulkanEngine::pickPhysicalDevice() {
+bool VulkanEngine::pickPhysicalDevice() {
     uint32_t deviceCount = 0;
     vkEnumeratePhysicalDevices(vkInstance, &deviceCount, nullptr);
     if (deviceCount == 0) return false;
@@ -618,7 +618,7 @@ bool CVulkanEngine::pickPhysicalDevice() {
     return false;
 }
 
-bool CVulkanEngine::createLogicalDevice() {
+bool VulkanEngine::createLogicalDevice() {
     float queuePriority = 1.0f;
     VkDeviceQueueCreateInfo queueCreateInfo{VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO};
     queueCreateInfo.queueFamilyIndex = graphicsQueueFamilyIndex;
@@ -636,7 +636,7 @@ bool CVulkanEngine::createLogicalDevice() {
     return true;
 }
 
-bool CVulkanEngine::createCommandPool() {
+bool VulkanEngine::createCommandPool() {
     VkCommandPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     poolInfo.queueFamilyIndex = graphicsQueueFamilyIndex;

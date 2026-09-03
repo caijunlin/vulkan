@@ -1,13 +1,13 @@
-#include "CVulkanStreamManager.h"
-#include "CVulkanEngine.h"
+#include "VulkanStreamManager.h"
+#include "VulkanEngine.h"
 #include <media/NdkImage.h>
 #include <android/hardware_buffer.h>
 #include <android/log.h>
 #include <unistd.h>
 
-void CVulkanStreamManager::init(AAssetManager *assetManager) {
+void VulkanStreamManager::init(AAssetManager *assetManager) {
     std::lock_guard<std::mutex> lock(mtx);
-    if (!CVulkanEngine::getInstance().init(assetManager)) {
+    if (!VulkanEngine::getInstance().init(assetManager)) {
     }
 }
 
@@ -20,15 +20,15 @@ static void OnImageAvailable(void *context, AImageReader *reader) {
         AImage_getHardwareBuffer(new_image, &ahb);
 
         if (ahb != nullptr) {
-            CVulkanStreamManager::getInstance().pushFrameToSurfaces(ctx->url, ahb, new_image);
+            VulkanStreamManager::getInstance().pushFrameToSurfaces(ctx->url, ahb, new_image);
         } else {
             AImage_delete(new_image);
         }
     }
 }
 
-void CVulkanStreamManager::pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb,
-                                               AImage *new_image) {
+void VulkanStreamManager::pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb,
+                                              AImage *new_image) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = streams.find(url);
     if (it == streams.end()) {
@@ -37,8 +37,8 @@ void CVulkanStreamManager::pushFrameToSurfaces(const std::string &url, AHardware
     }
 
     for (const auto &surface_id: it->second.bound_surfaces) {
-        CVulkanEngine::getInstance().updateVideoTexture(surface_id, ahb);
-        CVulkanEngine::getInstance().drawFrame(surface_id);
+        VulkanEngine::getInstance().updateVideoTexture(surface_id, ahb);
+        VulkanEngine::getInstance().drawFrame(surface_id);
     }
 
     if (it->second.current_image != nullptr) {
@@ -48,7 +48,7 @@ void CVulkanStreamManager::pushFrameToSurfaces(const std::string &url, AHardware
 }
 
 ANativeWindow *
-CVulkanStreamManager::createHeadlessReader(const std::string &url, int width, int height) {
+VulkanStreamManager::createHeadlessReader(const std::string &url, int width, int height) {
     std::lock_guard<std::mutex> lock(mtx);
     auto &ctx = streams[url];
     ctx.url = url;
@@ -72,7 +72,7 @@ CVulkanStreamManager::createHeadlessReader(const std::string &url, int width, in
     return ctx.native_window;
 }
 
-void CVulkanStreamManager::destroyHeadlessReader(const std::string &url) {
+void VulkanStreamManager::destroyHeadlessReader(const std::string &url) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = streams.find(url);
     if (it != streams.end()) {
@@ -88,26 +88,26 @@ void CVulkanStreamManager::destroyHeadlessReader(const std::string &url) {
     }
 }
 
-void CVulkanStreamManager::attachSurface(const std::string &url, const std::string &surface_id,
-                                         ANativeWindow *window) {
+void VulkanStreamManager::attachSurface(const std::string &url, const std::string &surface_id,
+                                        ANativeWindow *window) {
     std::lock_guard<std::mutex> lock(mtx);
-    CVulkanEngine::getInstance().addWindow(surface_id, window);
+    VulkanEngine::getInstance().addWindow(surface_id, window);
     surface_to_url[surface_id] = url;
     streams[url].bound_surfaces.insert(surface_id);
 }
 
-void CVulkanStreamManager::detachSurface(const std::string &surface_id) {
+void VulkanStreamManager::detachSurface(const std::string &surface_id) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = surface_to_url.find(surface_id);
     if (it == surface_to_url.end()) return;
     std::string url = it->second;
     surface_to_url.erase(it);
 
-    CVulkanEngine::getInstance().removeWindow(surface_id);
+    VulkanEngine::getInstance().removeWindow(surface_id);
     streams[url].bound_surfaces.erase(surface_id);
 }
 
-void CVulkanStreamManager::releaseAll() {
+void VulkanStreamManager::releaseAll() {
     std::lock_guard<std::mutex> lock(mtx);
     for (auto &pair: streams) {
         if (pair.second.image_reader) {
@@ -116,5 +116,5 @@ void CVulkanStreamManager::releaseAll() {
     }
     streams.clear();
     surface_to_url.clear();
-    CVulkanEngine::getInstance().cleanup();
+    VulkanEngine::getInstance().cleanup();
 }

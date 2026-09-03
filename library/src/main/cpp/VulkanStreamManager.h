@@ -16,10 +16,10 @@ struct StreamContext {
     AImage *current_image = nullptr;
 };
 
-class CVulkanStreamManager {
+class VulkanStreamManager {
 public:
-    static CVulkanStreamManager &getInstance() {
-        static CVulkanStreamManager instance;
+    static VulkanStreamManager &getInstance() {
+        static VulkanStreamManager instance;
         return instance;
     }
 
@@ -39,9 +39,9 @@ public:
     void pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb, AImage *new_image);
 
 private:
-    CVulkanStreamManager() = default;
+    VulkanStreamManager() = default;
 
-    ~CVulkanStreamManager() = default;
+    ~VulkanStreamManager() = default;
 
     std::unordered_map<std::string, StreamContext> streams;
     std::unordered_map<std::string, std::string> surface_to_url;
