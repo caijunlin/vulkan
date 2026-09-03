@@ -32,6 +32,8 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 object VLCRenderPool {
 
+    private var appContext: Context? = null
+
     /** LibVLC 实例的可空后备字段，由 [init] 延迟初始化，避免多次创建。 */
     private var _libVlc: LibVLC? = null
 
@@ -72,6 +74,7 @@ object VLCRenderPool {
     @Keep
     @JvmStatic
     fun init(context: Context) {
+        this.appContext = context
         if (_libVlc == null) {
             Log.d("Vulkan", "LibVLC start up.")
             // 使用 applicationContext 防止内存泄漏
@@ -110,11 +113,13 @@ object VLCRenderPool {
                 media.parse(IMedia.Parse.FetchNetwork)
             }
 
-            val videoWidth = 720
-            val videoHeight = 480
+            val videoWidth = 320
+            val videoHeight = 193
             val headlessSurface = VulkanCore.createHeadlessSurface(url, videoWidth, videoHeight)
             val mediaPlayer = MediaPlayer(libVlc)
+            mediaPlayer.aspectRatio = "$videoWidth:$videoHeight"
             mediaPlayer.media = media
+            mediaPlayer.vlcVout.setWindowSize(videoWidth, videoHeight)
             mediaPlayer.vlcVout.setVideoSurface(headlessSurface, null)
             mediaPlayer.vlcVout.attachViews()
             mediaPlayer.play()
