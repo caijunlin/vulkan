@@ -1,11 +1,5 @@
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.Copy
-
 val versionName = "1.0.0"
 val jdkVersion = 21
-
-val releaseAarName = "com.caijunlin.vulkan-${versionName}.aar"
-val releaseAarDir = layout.buildDirectory.dir("release-assets")
 
 plugins {
     alias(libs.plugins.android.library)
@@ -17,7 +11,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.caijunlin.vulkan"
+    namespace = "com.github.caijunlin.vulkan.library"
     version = versionName
 
     compileSdk {
@@ -79,69 +73,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            groupId = "com.github.caijunlin"
-            artifactId = "vlc-decoder"
-            version = versionName
-            afterEvaluate {
-                from(components["release"])
-            }
-        }
-    }
-}
-
-tasks.register<Copy>("prepareReleaseAar") {
-    description = ""
-    group = "publishing"
-    dependsOn("assembleRelease")
-
-    from(layout.buildDirectory.file("outputs/aar/library-release.aar"))
-    into(releaseAarDir)
-    rename { releaseAarName }
-}
-
-tasks.register("createRelease") {
-    description = ""
-    group = "publishing"
-    dependsOn("prepareReleaseAar")
-
-    doLast {
-        val aarFile = releaseAarDir.get().file(releaseAarName).asFile
-
-        val checkProcess = ProcessBuilder("gh", "release", "view", versionName)
-            .redirectOutput(ProcessBuilder.Redirect.DISCARD)
-            .redirectError(ProcessBuilder.Redirect.DISCARD)
-            .start()
-
-        if (checkProcess.waitFor() == 0) {
-            println("Release [$versionName] exists, uploading asset...")
-            ProcessBuilder(
-                "gh",
-                "release",
-                "upload",
-                versionName,
-                aarFile.absolutePath,
-                "--clobber"
-            ).inheritIO().start().waitFor()
-            return@doLast
-        }
-
-        println("Release: $versionName ...")
-        ProcessBuilder(
-            "gh",
-            "release",
-            "create",
-            versionName,
-            aarFile.absolutePath,
-            "--title",
-            versionName,
-            "--generate-notes"
-        ).inheritIO().start().waitFor()
-
-        println("Success!")
-    }
 }
