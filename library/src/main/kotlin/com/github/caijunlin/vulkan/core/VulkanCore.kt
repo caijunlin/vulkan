@@ -3,6 +3,8 @@ package com.github.caijunlin.vulkan.core
 import android.content.res.AssetManager
 import android.view.Surface
 import androidx.annotation.Keep
+import com.github.caijunlin.vulkan.core.VulkanCore.attachSurface
+import com.github.caijunlin.vulkan.core.VulkanCore.createHeadlessSurface
 
 /**
  * Vulkan 渲染引擎的 JNI 桥接入口。
@@ -10,10 +12,10 @@ import androidx.annotation.Keep
 object VulkanCore {
 
     /**
-     * 在对象初始化时加载本地库 `fork`。
+     * 在对象初始化时加载本地库
      */
     init {
-        System.loadLibrary("fork")
+        System.loadLibrary("cvulkan")
     }
 
     /**

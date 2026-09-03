@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22.1)
-project("fork")
+project("cvulkan")
 
 # --- Shader ---
 set(SHADER_SRC_DIR
@@ -76,16 +76,16 @@ set_target_properties(swresample PROPERTIES
         IMPORTED_LOCATION ${FFMPEG_ROOT}/lib/${ANDROID_ABI}/libswresample.so)
 
 add_library(
-        fork
+        cvulkan
         SHARED
-        fork_jni.cpp
-        VulkanEngine.cpp
-        ForkStreamManager.cpp)
+        cvulkan_jni.cpp
+        CVulkanEngine.cpp
+        CVulkanStreamManager.cpp)
 
-add_dependencies(fork CompileShaders)
+add_dependencies(cvulkan CompileShaders)
 
 target_link_libraries(
-        fork
+        cvulkan
         ${log-lib}
         ${android-lib}
         ${vulkan-lib}

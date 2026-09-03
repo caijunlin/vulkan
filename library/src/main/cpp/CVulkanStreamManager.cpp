@@ -1,13 +1,13 @@
-#include "ForkStreamManager.h"
-#include "VulkanEngine.h"
+#include "CVulkanStreamManager.h"
+#include "CVulkanEngine.h"
 #include <media/NdkImage.h>
 #include <android/hardware_buffer.h>
 #include <android/log.h>
 #include <unistd.h>
 
-void ForkStreamManager::init(AAssetManager *assetManager) {
+void CVulkanStreamManager::init(AAssetManager *assetManager) {
     std::lock_guard<std::mutex> lock(mtx);
-    if (!VulkanEngine::getInstance().init(assetManager)) {
+    if (!CVulkanEngine::getInstance().init(assetManager)) {
     }
 }
 
@@ -20,15 +20,15 @@ static void OnImageAvailable(void *context, AImageReader *reader) {
         AImage_getHardwareBuffer(new_image, &ahb);
 
         if (ahb != nullptr) {
-            ForkStreamManager::getInstance().pushFrameToSurfaces(ctx->url, ahb, new_image);
+            CVulkanStreamManager::getInstance().pushFrameToSurfaces(ctx->url, ahb, new_image);
         } else {
             AImage_delete(new_image);
         }
     }
 }
 
-void ForkStreamManager::pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb,
-                                            AImage *new_image) {
+void CVulkanStreamManager::pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb,
+                                               AImage *new_image) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = streams.find(url);
     if (it == streams.end()) {
@@ -37,8 +37,8 @@ void ForkStreamManager::pushFrameToSurfaces(const std::string &url, AHardwareBuf
     }
 
     for (const auto &surface_id: it->second.bound_surfaces) {
-        VulkanEngine::getInstance().updateVideoTexture(surface_id, ahb);
-        VulkanEngine::getInstance().drawFrame(surface_id);
+        CVulkanEngine::getInstance().updateVideoTexture(surface_id, ahb);
+        CVulkanEngine::getInstance().drawFrame(surface_id);
     }
 
     if (it->second.current_image != nullptr) {
@@ -48,7 +48,7 @@ void ForkStreamManager::pushFrameToSurfaces(const std::string &url, AHardwareBuf
 }
 
 ANativeWindow *
-ForkStreamManager::createHeadlessReader(const std::string &url, int width, int height) {
+CVulkanStreamManager::createHeadlessReader(const std::string &url, int width, int height) {
     std::lock_guard<std::mutex> lock(mtx);
     auto &ctx = streams[url];
     ctx.url = url;
@@ -72,7 +72,7 @@ ForkStreamManager::createHeadlessReader(const std::string &url, int width, int h
     return ctx.native_window;
 }
 
-void ForkStreamManager::destroyHeadlessReader(const std::string &url) {
+void CVulkanStreamManager::destroyHeadlessReader(const std::string &url) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = streams.find(url);
     if (it != streams.end()) {
@@ -88,26 +88,26 @@ void ForkStreamManager::destroyHeadlessReader(const std::string &url) {
     }
 }
 
-void ForkStreamManager::attachSurface(const std::string &url, const std::string &surface_id,
-                                      ANativeWindow *window) {
+void CVulkanStreamManager::attachSurface(const std::string &url, const std::string &surface_id,
+                                         ANativeWindow *window) {
     std::lock_guard<std::mutex> lock(mtx);
-    VulkanEngine::getInstance().addWindow(surface_id, window);
+    CVulkanEngine::getInstance().addWindow(surface_id, window);
     surface_to_url[surface_id] = url;
     streams[url].bound_surfaces.insert(surface_id);
 }
 
-void ForkStreamManager::detachSurface(const std::string &surface_id) {
+void CVulkanStreamManager::detachSurface(const std::string &surface_id) {
     std::lock_guard<std::mutex> lock(mtx);
     auto it = surface_to_url.find(surface_id);
     if (it == surface_to_url.end()) return;
     std::string url = it->second;
     surface_to_url.erase(it);
 
-    VulkanEngine::getInstance().removeWindow(surface_id);
+    CVulkanEngine::getInstance().removeWindow(surface_id);
     streams[url].bound_surfaces.erase(surface_id);
 }
 
-void ForkStreamManager::releaseAll() {
+void CVulkanStreamManager::releaseAll() {
     std::lock_guard<std::mutex> lock(mtx);
     for (auto &pair: streams) {
         if (pair.second.image_reader) {
@@ -116,5 +116,5 @@ void ForkStreamManager::releaseAll() {
     }
     streams.clear();
     surface_to_url.clear();
-    VulkanEngine::getInstance().cleanup();
+    CVulkanEngine::getInstance().cleanup();
 }

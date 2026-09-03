@@ -43,10 +43,10 @@ struct WindowContext {
 
 };
 
-class VulkanEngine {
+class CVulkanEngine {
 public:
-    static VulkanEngine &getInstance() {
-        static VulkanEngine instance;
+    static CVulkanEngine &getInstance() {
+        static CVulkanEngine instance;
         return instance;
     }
 
@@ -65,13 +65,13 @@ public:
     VkShaderModule createShaderModule(const std::vector<char> &code);
 
 private:
-    VulkanEngine() = default;
+    CVulkanEngine() = default;
 
-    ~VulkanEngine() = default;
+    ~CVulkanEngine() = default;
 
-    VulkanEngine(const VulkanEngine &) = delete;
+    CVulkanEngine(const CVulkanEngine &) = delete;
 
-    VulkanEngine &operator=(const VulkanEngine &) = delete;
+    CVulkanEngine &operator=(const CVulkanEngine &) = delete;
 
     AAssetManager *assetManager{nullptr};
     VkInstance vkInstance{VK_NULL_HANDLE};

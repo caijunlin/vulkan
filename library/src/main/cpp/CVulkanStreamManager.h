@@ -16,10 +16,10 @@ struct StreamContext {
     AImage *current_image = nullptr;
 };
 
-class ForkStreamManager {
+class CVulkanStreamManager {
 public:
-    static ForkStreamManager &getInstance() {
-        static ForkStreamManager instance;
+    static CVulkanStreamManager &getInstance() {
+        static CVulkanStreamManager instance;
         return instance;
     }
 
@@ -39,9 +39,9 @@ public:
     void pushFrameToSurfaces(const std::string &url, AHardwareBuffer *ahb, AImage *new_image);
 
 private:
-    ForkStreamManager() = default;
+    CVulkanStreamManager() = default;
 
-    ~ForkStreamManager() = default;
+    ~CVulkanStreamManager() = default;
 
     std::unordered_map<std::string, StreamContext> streams;
     std::unordered_map<std::string, std::string> surface_to_url;

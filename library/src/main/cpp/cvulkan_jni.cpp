@@ -2,14 +2,14 @@
 #include <android/native_window_jni.h>
 #include <android/hardware_buffer_jni.h>
 #include <android/asset_manager_jni.h>
-#include "ForkStreamManager.h"
-#include "VulkanEngine.h"
+#include "CVulkanStreamManager.h"
+#include "CVulkanEngine.h"
 
 // 显式初始化引擎
 extern "C" JNIEXPORT void JNICALL
 Java_com_github_caijunlin_vulkan_core_VulkanCore_initVulkan(JNIEnv* env, jclass clazz /* this */, jobject assetManager) {
     AAssetManager* nativeAssetManager = AAssetManager_fromJava(env, assetManager);
-    ForkStreamManager::getInstance().init(nativeAssetManager);
+    CVulkanStreamManager::getInstance().init(nativeAssetManager);
 }
 
 // 挂载物理显示屏幕
@@ -20,7 +20,7 @@ Java_com_github_caijunlin_vulkan_core_VulkanCore_attachSurface(JNIEnv* env, jcla
     if (window) {
         char surface_id[64];
         snprintf(surface_id, sizeof(surface_id), "surf_%p", window);
-        ForkStreamManager::getInstance().attachSurface(url, surface_id, window);
+        CVulkanStreamManager::getInstance().attachSurface(url, surface_id, window);
         ANativeWindow_release(window);
     }
     env->ReleaseStringUTFChars(urlObj, url);
@@ -33,7 +33,7 @@ Java_com_github_caijunlin_vulkan_core_VulkanCore_detachSurface(JNIEnv* env, jcla
     if (window) {
         char surface_id[64];
         snprintf(surface_id, sizeof(surface_id), "surf_%p", window);
-        ForkStreamManager::getInstance().detachSurface(surface_id);
+        CVulkanStreamManager::getInstance().detachSurface(surface_id);
         ANativeWindow_release(window);
     }
 }
@@ -44,7 +44,7 @@ Java_com_github_caijunlin_vulkan_core_VulkanCore_createHeadlessSurface(JNIEnv* e
     const char *url = env->GetStringUTFChars(urlObj, nullptr);
 
     // 透传 width 和 height 给底层
-    ANativeWindow* window = ForkStreamManager::getInstance().createHeadlessReader(url, width, height);
+    ANativeWindow* window = CVulkanStreamManager::getInstance().createHeadlessReader(url, width, height);
 
     jobject java_surface = ANativeWindow_toSurface(env, window);
     env->ReleaseStringUTFChars(urlObj, url);
@@ -55,12 +55,12 @@ Java_com_github_caijunlin_vulkan_core_VulkanCore_createHeadlessSurface(JNIEnv* e
 extern "C" JNIEXPORT void JNICALL
 Java_com_github_caijunlin_vulkan_core_VulkanCore_destroyHeadlessSurface(JNIEnv* env, jobject /* this */, jstring urlObj) {
     const char *url = env->GetStringUTFChars(urlObj, nullptr);
-    ForkStreamManager::getInstance().destroyHeadlessReader(url);
+    CVulkanStreamManager::getInstance().destroyHeadlessReader(url);
     env->ReleaseStringUTFChars(urlObj, url);
 }
 
 // 销毁一切资源
 extern "C" JNIEXPORT void JNICALL
 Java_com_github_caijunlin_vulkan_core_VulkanCore_releaseAll(JNIEnv* env, jclass clazz /* this */) {
-    ForkStreamManager::getInstance().releaseAll();
+    CVulkanStreamManager::getInstance().releaseAll();
 }
